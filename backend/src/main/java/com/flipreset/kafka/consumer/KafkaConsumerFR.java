@@ -6,7 +6,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.errors.WakeupException;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,23 +39,26 @@ public class KafkaConsumerFR {
 
         consumer.subscribe(Arrays.asList(topic));
 
-        while (true) {
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-            for (ConsumerRecord<String, String> record : records) {
+        try {
+            while (true) {
+                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+                for (ConsumerRecord<String, String> record : records) {
 
-                if (mongoDbServiceFR.findDocument(record.key(), record.value())) {
-                    log.info("Key: " + record.key() + ", Value: " + record.value() + "Finnes allerede");
-                } else {
-                    // document does not exist, insert a new one
-                    Document document = new Document("key", record.key()).append("value", record.value());
-                    mongoDbServiceFR.insertDocument(document);
+                    if (mongoDbServiceFR.findDocument(record.key(), record.value())) {
+                        log.info("Key: " + record.key() + ", Value: " + record.value() + "Finnes allerede");
+                    } else {
+                        // document does not exist, insert a new one
+                        Document document = new Document("key", record.key()).append("value", record.value());
+                        mongoDbServiceFR.insertDocument(document);
 
-                    log.info("Key: " + record.key() + ", Value: " + record.value() + " Lagret i MongoDB");
-                    log.info("Partition: " + record.partition() + ", Offset: " + record.offset());
+                        log.info("Key: " + record.key() + ", Value: " + record.value() + " Lagret i MongoDB");
+                        log.info("Partition: " + record.partition() + ", Offset: " + record.offset());
+                    }
+
                 }
-
             }
+        } finally {
+            consumer.close();
         }
-
     }
 }

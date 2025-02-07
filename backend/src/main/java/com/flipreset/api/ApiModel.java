@@ -11,8 +11,9 @@ public class ApiModel {
 
     // Inner class for body-delen
     public static class Body {
-        public String queryKey;
+        public String query;
         public String operationName;
         public Map<String, String> variables;
     }
+
 }

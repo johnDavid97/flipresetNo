@@ -4,7 +4,6 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
-import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDbServiceFR {
     private final MongoCollection<Document> collection;

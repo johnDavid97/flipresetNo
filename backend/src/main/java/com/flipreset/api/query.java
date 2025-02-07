@@ -1,7 +1,7 @@
 package com.flipreset.api;
 
 public class query {
-    public static final String TOURNAMENTS = """
+    public static final String RLCS_DATA = """
             query LeagueStandings {
               league(slug: "RLCS-2025") {
                 id

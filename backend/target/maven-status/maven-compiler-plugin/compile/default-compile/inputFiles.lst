@@ -1,4 +1,6 @@
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/App.java
+/Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/api/ApiModel.java
+/Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/api/ApiService.java
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/api/query.java
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/db/MongoDbConnectionFR.java
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/db/MongoDbServiceFR.java

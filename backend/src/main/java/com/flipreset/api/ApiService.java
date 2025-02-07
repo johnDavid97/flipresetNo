@@ -2,58 +2,54 @@ package com.flipreset.api;
 
 import java.net.http.HttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.core.type.TypeReference;
-import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.time.Duration;
+import java.net.URISyntaxException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.Map;
-import java.util.Scanner;
 
 public class ApiService {
-    private static HttpClient client = HttpClient.newHttpClient();
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void main(String[] args) {
         try {
-            // This was made by following the tuorial of Gayanga Kuruppu on Medium
-            ApiModel apiModel = mapper.readValue(new File("src/main/resources/api_config.json"), ApiModel.class);
+
+            InputStream inputStream = ApiService.class.getClassLoader().getResourceAsStream("api_config.json");
+            if (inputStream == null) {
+                throw new RuntimeException("Kunne ikke finne api_config.json i resources-mappen!");
+            }
+
+            ApiModel apiModel = mapper.readValue(inputStream, ApiModel.class);
 
             URI uri = new URI(apiModel.url);
-            URL newURL = uri.toURL();
+            HttpClient httpClient = HttpClient.newBuilder()
+                    .version(HttpClient.Version.HTTP_2)
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
 
-            HttpURLConnection conn = (HttpURLConnection) newURL.openConnection();
-            conn.setRequestMethod(apiModel.method);
-            conn.setRequestProperty("Content-Type", "application/json");
+            HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
+                    .uri(uri)
+                    .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(apiModel.body)));
 
-            for (Map.Entry<String, String> header : apiModel.headers.entrySet()) {
-                conn.setRequestProperty(header.getKey(), header.getValue());
+            for (Map.Entry<String, String> entry : apiModel.headers.entrySet()) {
+                requestBuilder.header(entry.getKey(), entry.getValue());
             }
 
-            if (apiModel.method.equalsIgnoreCase("POST")) {
-                conn.setDoOutput(true);
-                String requestBody = mapper.writeValueAsString(apiModel.body);
-                conn.getOutputStream().write(requestBody.getBytes(StandardCharsets.UTF_8));
-            }
+            HttpRequest request = requestBuilder.build();
 
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                throw new RuntimeException("HttpResponseCode: " + responseCode);
-            } else {
+            System.out.println("Request: " + request);
+            System.out.println("Headers: " + request.headers().allValues("content-type"));
+            System.out.println("Body: " + mapper.writeValueAsString(apiModel.body));
 
-                InputStream responseStream = conn.getInputStream();
-                Scanner scanner = new Scanner(responseStream, StandardCharsets.UTF_8);
-                String responseBody = scanner.useDelimiter("\\A").next();
-                scanner.close();
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-                System.out.println("Response fra API: " + responseBody);
-            }
-
-        } catch (Exception e) {
+            System.out.println("Status code: " + response.statusCode());
+            System.out.println("Headers: " + response.headers().allValues("content-type"));
+            System.out.println("Body: " + response.body());
+        } catch (IOException | InterruptedException | URISyntaxException e) {
             e.printStackTrace();
         }
     }

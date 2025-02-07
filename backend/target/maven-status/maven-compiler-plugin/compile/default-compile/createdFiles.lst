@@ -1,3 +1,4 @@
+com/flipreset/App.class
+com/flipreset/db/MongoDbConnectionFR.class
 com/flipreset/kafka/producer/KafkaProducerFR.class
-com/example/App.class
 com/flipreset/kafka/consumer/KafkaConsumerFR.class

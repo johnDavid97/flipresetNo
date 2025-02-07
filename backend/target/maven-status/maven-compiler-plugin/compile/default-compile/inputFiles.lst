@@ -1,3 +1,4 @@
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/App.java
+/Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/db/MongoDbConnectionFR.java
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/kafka/consumer/KafkaConsumerFR.java
 /Users/johannordstrand/flipResetNo/flipresetNo/backend/src/main/java/com/flipreset/kafka/producer/KafkaProducerFR.java

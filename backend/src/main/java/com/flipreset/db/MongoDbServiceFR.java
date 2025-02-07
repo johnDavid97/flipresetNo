@@ -1,23 +1,30 @@
 package com.flipreset.db;
 
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
+import static com.mongodb.client.model.Filters.eq;
 
 public class MongoDbServiceFR {
+    private final MongoCollection<Document> collection;
+    private static final MongoDatabase database = MongoDbConnectionFR.getDatabase();
 
-    private MongoDatabase database;
-
-    public MongoDbServiceFR(MongoDatabase database) {
-        this.database = database;
-
+    public MongoDbServiceFR(String collectionName) {
+        this.collection = database.getCollection(collectionName);
     }
 
     public void insertDocument(Document document) {
-        MongoCollection<Document> collection = database.getCollection("flipreset");
         collection.insertOne(document);
+        System.out.println("Dokument lagret i MongoDB: " + document.toJson());
     }
 
+    public Boolean findDocument(String key, String value) {
+        if (collection.find(Filters.eq("key", key)).first() != null) {
+
+            System.out.println("Dokument fantes:" + collection.find(Filters.eq("key", key)).first().toJson());
+            return true;
+        }
+        return false;
+    }
 }

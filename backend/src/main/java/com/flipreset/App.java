@@ -1,11 +1,31 @@
 package com.flipreset;
 
-/**
- * Hello world!
- *
- */
-public class App {
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.flipreset.api.ApiService;
+import com.flipreset.kafka.consumer.KafkaConsumerFR;
+
+@SpringBootApplication
+public class App implements CommandLineRunner {
+
+    @Autowired
+    private ApiService apiService;
+
+    @Autowired
+    private KafkaConsumerFR kafkaConsumerFR;
+
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        SpringApplication.run(App.class, args);
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        // Start ApiService
+        apiService.startApi();
+
+        // Start KafkaConsumer
+        kafkaConsumerFR.startConsumer();
     }
 }

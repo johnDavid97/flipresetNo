@@ -1,4 +1,4 @@
-package com.flipreset.api;
+package com.flipreset.models;
 
 import java.util.Map;
 
@@ -12,8 +12,8 @@ public class ApiModel {
     // Inner class for body-delen
     public static class Body {
         public String query;
-        public String operationName;
-        public Map<String, String> variables;
+        // public String operationName;
+        // public Map<String, String> variables;
     }
 
 }

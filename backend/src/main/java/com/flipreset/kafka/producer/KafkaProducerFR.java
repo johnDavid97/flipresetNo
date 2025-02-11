@@ -8,32 +8,42 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import org.springframework.stereotype.Component;
 
+@Component
 public class KafkaProducerFR {
     private static final Logger log = LoggerFactory.getLogger(KafkaProducerFR.class);
+    private static final String BOOTSTRAP_SERVERS = "127.0.0.1:9092";
 
-    public static void main(String[] args) {
-        log.info("I am a Kafka Producer");
-        String bootstrapServers = "127.0.0.1:9092";
+    private static final Properties properties = new Properties();
+    private static final KafkaProducer<String, String> producer;
 
-        Properties properties = new Properties();
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+    static {
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        producer = new KafkaProducer<>(properties);
+    }
 
-        // create the producer
-        KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
+    public static void sendMessage(String topic, String key, String msg) {
+        ProducerRecord<String, String> record = new ProducerRecord<>(topic, key, msg);
 
-        ProducerRecord<String, String> record = new ProducerRecord<>("frist_topic", "player4", "Score: 3000");
+        try {
+            producer.send(record, (metadata, exception) -> {
+                if (exception == null) {
+                    log.info("Melding sendt til Kafka -> Topic: {}, Partition: {}, Offset: {}",
+                            metadata.topic(), metadata.partition(), metadata.offset());
+                } else {
+                    log.error("Feil ved sending av Kafka-melding: {}", exception.getMessage());
+                }
+            });
+        } catch (Exception e) {
+            log.error("Exception i KafkaProducer: ", e);
+        }
+    }
 
-        // send data - asynchronous
-        producer.send(record);
-
-        // flush data - synchronous
-        producer.flush();
-
-        // flush and close producer
+    public static void closeProducer() {
         producer.close();
-
+        log.info("Kafka Producer lukket.");
     }
 }

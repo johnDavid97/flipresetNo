@@ -11,6 +11,8 @@ import com.flipreset.models.EventModel;
 import com.flipreset.models.LeagueModel;
 import com.flipreset.models.MatchesModel;
 import com.flipreset.services.JsonProcessingService;
+
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -23,6 +25,7 @@ public class KafkaConsumerFR {
     private static final MongoDbServiceFR mongoDbServiceFR = new MongoDbServiceFR("flipreset");
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Async
     public void startConsumer() {
         log.info("Kafka Consumer starter...");
 

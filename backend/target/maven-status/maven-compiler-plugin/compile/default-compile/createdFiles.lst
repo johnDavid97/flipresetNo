@@ -6,8 +6,10 @@ com/flipreset/kafka/consumer/KafkaConsumerFR.class
 com/flipreset/models/MatchesModel$Player.class
 com/flipreset/api/query.class
 com/flipreset/models/TournamentModel$Event.class
+com/flipreset/models/MatchesModel$League.class
 com/flipreset/models/MatchesModel$Team.class
 com/flipreset/services/MatchesService.class
+com/flipreset/models/MatchesModel$Event.class
 com/flipreset/models/MatchesModel$PlayerInfo.class
 com/flipreset/springboot/WebController.class
 com/flipreset/models/EventModel$Tournament.class

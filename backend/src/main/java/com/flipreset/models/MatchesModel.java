@@ -10,7 +10,10 @@ public class MatchesModel {
     private Team team1;
     private Team team2;
     private Long winnerId;
+    private League league; // Nytt felt for League
+    private Event event; // Nytt felt for Event
 
+    // Getters and setters
     public String getId() {
         return id;
     }
@@ -67,6 +70,69 @@ public class MatchesModel {
         this.winnerId = winnerId;
     }
 
+    public League getLeague() {
+        return league;
+    }
+
+    public void setLeague(League league) {
+        this.league = league;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    // League class
+    public static class League {
+        private String id;
+        private String name;
+
+        // Getters and setters
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    // Event class
+    public static class Event {
+        private String id;
+        private String name;
+
+        // Getters and setters
+        public String getId() {
+            return id;
+        }
+
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+    }
+
+    // Team class
     public static class Team {
         private String id;
         private String name;
@@ -74,6 +140,7 @@ public class MatchesModel {
         private List<Image> images;
         private List<Player> members;
 
+        // Getters and setters
         public String getId() {
             return id;
         }
@@ -115,12 +182,14 @@ public class MatchesModel {
         }
     }
 
+    // Image class
     public static class Image {
         private String url;
         private String type;
         private Integer width;
         private Integer height;
 
+        // Getters and setters
         public String getUrl() {
             return url;
         }
@@ -154,11 +223,13 @@ public class MatchesModel {
         }
     }
 
+    // Player class
     public static class Player {
         private String id;
         private boolean isCaptain;
         private PlayerInfo player;
 
+        // Getters and setters
         public String getId() {
             return id;
         }
@@ -184,6 +255,7 @@ public class MatchesModel {
         }
     }
 
+    // PlayerInfo class
     public static class PlayerInfo {
         private String id;
         private String gamerTag;
@@ -193,6 +265,7 @@ public class MatchesModel {
             this.gamerTag = gamerTag;
         }
 
+        // Getters and setters
         public String getId() {
             return id;
         }

@@ -93,7 +93,7 @@ public class ApiService {
                 case "getLeagues":
                     KafkaProducerFR.sendMessage("leagues-topic", "leagues", jsonResponse);
                     LeagueModel league = JsonProcessingService.processLeagueResponse(jsonResponse);
-                    log.info("✅ LeagueModel sendt: ID = {}", league.getId());
+                    log.info("LeagueModel sendt: ID = {}", league.getId());
                     break;
 
                 case "getEvents":
@@ -104,20 +104,26 @@ public class ApiService {
                     for (JsonNode eventNode : eventNodes) {
                         String eventJson = mapper.writeValueAsString(eventNode);
                         KafkaProducerFR.sendMessage("events-topic", "events", eventJson);
-                        log.info("✅ Event sendt til Kafka: {}", eventJson);
+                        log.info("Event sendt til Kafka: {}", eventJson);
                     }
                     break;
 
                 case "getSets":
                     log.info("Sets respons:" + jsonResponse);
 
-                    JsonNode matchesNodes = mapper.readTree(jsonResponse).path("data").path("league").path("events")
+                    JsonNode eventsNodes = mapper.readTree(jsonResponse).path("data").path("league").path("events")
                             .path("nodes");
-                    log.info("etter å mappe matchesNodes: " + matchesNodes.toString());
-                    for (JsonNode matchNode : matchesNodes) {
-                        String matchJson = mapper.writeValueAsString(matchNode);
-                        KafkaProducerFR.sendMessage("sets-topic", "sets", matchJson);
-                        log.info("✅ Match sendt til Kafka: {}", matchNode.path("id").asText());
+                    log.info("Etter å mappe eventsNodes: " + eventsNodes.toString());
+
+                    for (JsonNode eventNode : eventsNodes) {
+                        JsonNode setsNodes = eventNode.path("sets").path("nodes");
+                        log.info("Etter å hente setsNodes: " + setsNodes.toString());
+
+                        for (JsonNode matchNode : setsNodes) {
+                            String matchJson = mapper.writeValueAsString(matchNode);
+                            KafkaProducerFR.sendMessage("sets-topic", "sets", matchJson);
+                            log.info("Match sendt til Kafka: {}", matchNode.path("id").asText());
+                        }
                     }
                     break;
 
@@ -126,7 +132,7 @@ public class ApiService {
                     break;
             }
         } catch (Exception e) {
-            log.error("❌ Feil ved prosessering av respons for {}: {}", query.getName(), e.getMessage(), e);
+            log.error("Feil ved prosessering av respons for {}: {}", query.getName(), e.getMessage(), e);
         }
     }
 }

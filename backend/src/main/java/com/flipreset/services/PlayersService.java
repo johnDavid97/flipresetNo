@@ -1,17 +1,21 @@
 package com.flipreset.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.bson.Document;
 import java.util.List;
 import java.util.ArrayList;
 
+@Service
 public class PlayersService {
-    private static MongoService mongoService;
+    private final MongoService mongoService;
 
+    @Autowired
     public PlayersService(MongoService mongoService) {
-        PlayersService.mongoService = mongoService;
+        this.mongoService = mongoService;
     }
 
-    public static List<Document> getAllPlayers() {
+    public List<Document> getAllPlayers() {
         try {
             return mongoService.getDatabase().getCollection("players").find().into(new ArrayList<>());
         } catch (Exception e) {
@@ -21,7 +25,7 @@ public class PlayersService {
 
     }
 
-    public static Document getTeamByPlayer(String playerId) {
+    public Document getTeamByPlayer(String playerId) {
         Document player = mongoService.getDatabase().getCollection("players").find(new Document("_id", playerId))
                 .first();
 

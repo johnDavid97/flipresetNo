@@ -1,17 +1,22 @@
 package com.flipreset.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.bson.Document;
 import java.util.List;
 import java.util.ArrayList;
 
+@Component
 public class EventsService {
-    private static MongoService mongoService;
+    private final MongoService mongoService;
 
+    @Autowired
     public EventsService(MongoService mongoService) {
-        EventsService.mongoService = mongoService;
+        this.mongoService = mongoService;
     }
 
-    public static List<Document> getAllEvents() {
+    public List<Document> getAllEvents() {
         try {
             return mongoService.getDatabase().getCollection("events").find().into(new ArrayList<>());
         } catch (Exception e) {

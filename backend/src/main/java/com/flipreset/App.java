@@ -22,10 +22,10 @@ public class App implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Start ApiService
-        apiService.startApi();
+        // Start ApiService parallelt
+        new Thread(() -> apiService.startApi()).start();
 
-        // Start KafkaConsumer
-        kafkaConsumerFR.startConsumer();
+        // Start KafkaConsumer parallelt
+        new Thread(() -> kafkaConsumerFR.startConsumer()).start();
     }
 }

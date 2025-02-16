@@ -1,5 +1,7 @@
 # Flip Reset - Rocket League Esports Data Platform
 
+![Flip Reset](frontend/public/logoFane.png "FlipReset")
+
 A full-stack application for tracking and displaying Rocket League Championship Series (RLCS) data, featuring real-time updates and comprehensive statistics. This project was only built to showcase backend experience.
 
 ---
@@ -36,11 +38,11 @@ This application tracks and displays Rocket League Championship Series (RLCS) da
 
 ## 💻 Built With
 
-- **Spring Boot**
-- **Next.js**
-- **Apache Kafka**
-- **MongoDB**
-- **Docker Compose**
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Apache Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 ---
 
